@@ -168,7 +168,7 @@ public class CustomerView {
                 currentCustomer.setAddress(newAddress);
             }
 
-            // 3. Gọi Service để cập nhật
+
             boolean isSuccess = customerService.updateCustomer(currentCustomer);
             if (isSuccess) {
                 System.out.println(GREEN + "Cập nhật thông tin khách hàng thành công!" + RESET);

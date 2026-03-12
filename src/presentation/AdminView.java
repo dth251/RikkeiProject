@@ -13,6 +13,7 @@ public class AdminView {
     public static Admin userLogin = null;
     private static final IAdminService adminService = new AdminServiceImpl();
 
+    // hien thi menu dang nhap
     public static void showMenuLogin(Scanner sc) {
         System.out.println("=================== ĐĂNG NHẬP QUẢN TRỊ ====================");
         System.out.print("Tên đăng nhập : ");
@@ -34,6 +35,8 @@ public class AdminView {
         }
     }
 
+
+    // hien thi menu chinh
 public static void showMainMenu(Scanner sc) {
     int choice = 0;
     do {

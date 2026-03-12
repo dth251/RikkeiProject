@@ -23,6 +23,9 @@ public class InvoiceView {
     private final IInvoiceService invoiceService = new InvoiceServiceImpl();
     private final ICustomerService customerService = new CustomerServiceImpl();
     private final IProductService productService = new ProductServiceImpl();
+
+
+
     public void showInvoiceMenu(Scanner sc) {
         int choice = 0;
         do {
@@ -65,11 +68,11 @@ public class InvoiceView {
         } while (choice != 4);
     }
 
-//     --- MENU TÌM KIẾM CON ---
+    // menu con tim kiem
     private void showSearchMenu(Scanner sc) {
         int choice = 0;
         do {
-            System.out.println("\n→ Menu tìm kiếm hóa đơn");
+            System.out.println(" Menu tìm kiếm hóa đơn");
             System.out.println("1. Tìm theo tên khách hàng");
             System.out.println("2. Tìm theo ngày/tháng/năm");
             System.out.println("3. Quay lại menu hóa đơn");
@@ -105,7 +108,6 @@ public class InvoiceView {
     // them hoa don
     private void addInvoiceView(Scanner sc) {
         try {
-            // 1. CHỌN KHÁCH HÀNG
             System.out.print("Nhập ID khách hàng mua hàng: ");
             int customerId = Integer.parseInt(sc.nextLine());
 
@@ -116,23 +118,23 @@ public class InvoiceView {
             }
             System.out.println(GREEN + "Khách hàng: " + customer.getName() + RESET);
 
-            // 2. TẠO HÓA ĐƠN TRỐNG
+            // tao hoa don tron g
             Invoice invoice = new Invoice();
             invoice.setCustomerId(customerId);
             double totalAmount = 0;
 
-            // 3. VÒNG LẶP CHỌN SẢN PHẨM
+            // vong lap de chon san pham
             while (true) {
                 System.out.println("\n--- Thêm sản phẩm vào giỏ ---");
                 System.out.print("Nhập ID điện thoại (Nhấn 0 để dừng chọn): ");
                 int productId = Integer.parseInt(sc.nextLine());
 
-                if (productId == 0) break; // Thoát vòng lặp chọn sản phẩm
+                if (productId == 0) break; // thoat khoi vong lap
 
                 Product product = productService.getProductByid(productId);
                 if (product == null) {
                     System.out.println(RED + "Sản phẩm không tồn tại!" + RESET);
-                    continue; // Quay lại vòng lặp hỏi sản phẩm khác
+                    continue; // quay lai vong lap de them san pham khac
                 }
 
                 System.out.println("Đang chọn: " + product.getName() + " - Tồn kho: " + product.getStock() + " - Giá: " + product.getPrice());
@@ -140,7 +142,6 @@ public class InvoiceView {
                 System.out.print("Nhập số lượng muốn mua: ");
                 int quantity = Integer.parseInt(sc.nextLine());
 
-                // Kiểm tra logic nhập số lượng
                 if (quantity <= 0) {
                     System.out.println(RED + "Số lượng mua phải lớn hơn 0!" + RESET);
                     continue;
@@ -150,22 +151,22 @@ public class InvoiceView {
                     continue;
                 }
 
-                // Nếu mọi thứ ổn, tạo một Chi tiết hóa đơn
+                // tao hoa don
                 InvoiceDetail detail = new InvoiceDetail();
                 detail.setProductId(productId);
                 detail.setQuantity(quantity);
-                detail.setUnitPrice(product.getPrice()); // Lấy giá niêm yết hiện tại
+                detail.setUnitPrice(product.getPrice());
 
-                // Tính tiền cộng dồn
+                // tinh tong tien
                 totalAmount += (product.getPrice() * quantity);
 
-                // Thêm vào danh sách chi tiết của hóa đơn
+                // them vao danh sach chi tiet
                 invoice.getDetails().add(detail);
 
                 System.out.println(GREEN + "Đã thêm " + quantity + " " + product.getName() + " vào hóa đơn." + RESET);
             }
 
-            // 4. KẾT THÚC MUA SẮM VÀ TIẾN HÀNH THANH TOÁN
+
             if (invoice.getDetails().isEmpty()) {
                 System.out.println(RED + "Hóa đơn trống. Đã hủy quá trình tạo hóa đơn!" + RESET);
                 return;
@@ -175,7 +176,6 @@ public class InvoiceView {
             System.out.println("===============================");
             System.out.println("Tổng tiền thanh toán: " + totalAmount + " VND");
 
-            // Đẩy xuống Service để thực hiện Transaction
             boolean isSuccess = invoiceService.addInvoice(invoice);
 
             if (isSuccess) {
@@ -205,16 +205,15 @@ public class InvoiceView {
         System.out.printf("%-5s | %-25s | %-20s | %-15s\n", "ID", "Tên khách hàng", "Ngày tạo", "Tổng tiền");
         System.out.println("==========================================================================================");
 
-        // Tạo công cụ định dạng ngày tháng theo kiểu Việt Nam (Ngày/Tháng/Năm Giờ:Phút)
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
         for (Invoice inv : list) {
-            // Nếu ngày tạo không bị null thì format nó, ngược lại in ra "N/A"
             String dateStr = (inv.getCreatedAt() != null) ? inv.getCreatedAt().format(formatter) : "N/A";
 
             System.out.printf("%-5d | %-25s | %-20s | %-15.2f\n",
                     inv.getId(),
-                    inv.getCustomerName(), // Tên lấy từ lệnh JOIN
+                    inv.getCustomerName(),
                     dateStr,
                     inv.getTotalAmount());
         }
@@ -243,6 +242,7 @@ public class InvoiceView {
     }
 
 
+    // tim kiem theo ten khach hang
     private void searchByCustomerNameView(Scanner sc) {
         System.out.print("Nhập tên khách hàng cần tìm: ");
         String name = sc.nextLine();
@@ -252,12 +252,13 @@ public class InvoiceView {
         printInvoiceList(list);
     }
 
+
+    // tim kiem theo ngay
     private void searchByDateView(Scanner sc) {
         System.out.print("Nhập ngày tạo hóa đơn (Định dạng: dd/MM/yyyy, ví dụ: 25/12/2025): ");
         String dateStr = sc.nextLine().trim();
 
         try {
-            // Ép kiểu chuỗi người dùng nhập thành LocalDate
             java.time.format.DateTimeFormatter dateFormatter = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy");
             java.time.LocalDate searchDate = java.time.LocalDate.parse(dateStr, dateFormatter);
 
