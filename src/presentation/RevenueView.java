@@ -19,12 +19,15 @@ public class RevenueView {
     public void showRevenueMenu(Scanner sc) {
         int choice = 0;
         do {
-            System.out.println("\n========= THỐNG KÊ DOANH THU =========");
-            System.out.println("1. Doanh thu theo ngày");
-            System.out.println("2. Doanh thu theo tháng");
-            System.out.println("3. Doanh thu theo năm");
-            System.out.println("4. Quay lại menu chính");
-            System.out.println("======================================");
+            System.out.println("""
+                    ====================== THỐNG KÊ DOANH THU =====================
+                    1. Doanh thu theo ngày
+                    2. Doanh thu theo tháng
+                    3. Doanh thu theo năm
+                    4. Quay lại menu chính
+                    ===============================================================
+                    """);
+
             System.out.print("Nhập lựa chọn: ");
 
             try {
@@ -40,8 +43,7 @@ public class RevenueView {
                         revenueByYear(sc);
                         break;
                     case 4:
-                        System.out.println(">>> Đang quay lại Menu chính...");
-                        break;
+                        return;
                     default:
                         System.out.println(RED + "Lựa chọn không hợp lệ!" + RESET);
                 }
@@ -69,14 +71,14 @@ public class RevenueView {
 
     private void revenueByMonth(Scanner sc) {
         try {
-            System.out.print("Nhập tháng (1-12): ");
+            System.out.print("Nhập tháng: ");
             int month = Integer.parseInt(sc.nextLine());
             if (month < 1 || month > 12) {
                 System.out.println(RED + "Lỗi logic: Tháng phải nằm trong khoảng từ 1 đến 12!" + RESET);
                 return;
             }
 
-            System.out.print("Nhập năm (Ví dụ: 2026): ");
+            System.out.print("Nhập năm (theo định dạng: //yyyy): ");
             int year = Integer.parseInt(sc.nextLine());
 
             double revenue = invoiceService.getRevenueByMonth(month, year);
@@ -89,7 +91,7 @@ public class RevenueView {
 
     private void revenueByYear(Scanner sc) {
         try {
-            System.out.print("Nhập năm cần thống kê (Ví dụ: 2026): ");
+            System.out.print("Nhập năm cần thống kê (theo định dạng: yyyy): ");
             int year = Integer.parseInt(sc.nextLine());
 
             double revenue = invoiceService.getRevenueByYear(year);

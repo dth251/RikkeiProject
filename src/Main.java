@@ -8,6 +8,7 @@ public class Main {
     public static final String RED = "\u001B[31m";
     public static final String GREEN = "\u001B[32m";
     public static final String RESET = "\u001B[0m";
+
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
@@ -39,6 +40,6 @@ public class Main {
                 default:
                     System.out.println(RED + "Lựa chọn không hợp lệ vui lòng thử lại !" + RESET);
             }
-        } while(choice != 2);
-        }
+        } while (choice != 2);
     }
+}

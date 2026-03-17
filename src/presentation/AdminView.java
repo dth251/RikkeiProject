@@ -15,7 +15,7 @@ public class AdminView {
 
     // hien thi menu dang nhap
     public static void showMenuLogin(Scanner sc) {
-        System.out.println("=================== ĐĂNG NHẬP QUẢN TRỊ ====================");
+        System.out.println("================== ĐĂNG NHẬP QUẢN TRỊ =====================");
         System.out.print("Tên đăng nhập : ");
         String username = sc.nextLine();
         System.out.print("Mật khẩu : ");
@@ -37,10 +37,10 @@ public class AdminView {
 
 
     // hien thi menu chinh
-public static void showMainMenu(Scanner sc) {
-    int choice = 0;
-    do {
-        System.out.println("""
+    public static void showMainMenu(Scanner sc) {
+        int choice = 0;
+        do {
+            System.out.println("""
                     ======================== MENU CHÍNH =======================
                     1. Quản lý sản phẩm điện thoại
                     2. Quản lý khách hàng
@@ -49,40 +49,40 @@ public static void showMainMenu(Scanner sc) {
                     5. Đăng xuất
                     ===========================================================
                     """);
-        System.out.print("Nhập lựa chọn: ");
+            System.out.print("Nhập lựa chọn: ");
 
-        try {
-            choice = Integer.parseInt(sc.nextLine());
-        } catch (NumberFormatException e) {
-            System.out.println(RED + "Lỗi: Vui lòng nhập một số nguyên!" + RESET);
-            continue;
-        }
+            try {
+                choice = Integer.parseInt(sc.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println(RED + "Lỗi: Vui lòng nhập một số nguyên!" + RESET);
+                continue;
+            }
 
-        switch (choice) {
-            case 1:
-                ProductView productView = new ProductView();
-                productView.showMenuProduct(sc);
-                break;
-            case 2:
-                CustomerView customerView = new CustomerView();
-                customerView.showMenuCustomer(sc);
-                break;
-            case 3:
-                InvoiceView invoiceView = new InvoiceView();
-                invoiceView.showInvoiceMenu(sc);
-                break;
-            case 4:
-                RevenueView revenueView = new RevenueView();
-                revenueView.showRevenueMenu(sc);
-                break;
-            case 5:
-                System.out.println(GREEN + "Đăng xuất thành công!" + RESET);
-                userLogin = null;
-                break;
-            default:
-                System.out.println(RED + "Lựa chọn không hợp lệ. Vui lòng thử lại!" + RESET);
-        }
-    } while (choice != 5);
+            switch (choice) {
+                case 1:
+                    ProductView productView = new ProductView();
+                    productView.showMenuProduct(sc);
+                    break;
+                case 2:
+                    CustomerView customerView = new CustomerView();
+                    customerView.showMenuCustomer(sc);
+                    break;
+                case 3:
+                    InvoiceView invoiceView = new InvoiceView();
+                    invoiceView.showInvoiceMenu(sc);
+                    break;
+                case 4:
+                    RevenueView revenueView = new RevenueView();
+                    revenueView.showRevenueMenu(sc);
+                    break;
+                case 5:
+                    System.out.println(GREEN + "Đăng xuất thành công!" + RESET);
+                    userLogin = null;
+                    break;
+                default:
+                    System.out.println(RED + "Lựa chọn không hợp lệ. Vui lòng thử lại!" + RESET);
+            }
+        } while (choice != 5);
     }
 
 }

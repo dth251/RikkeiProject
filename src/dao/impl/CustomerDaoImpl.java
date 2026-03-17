@@ -47,7 +47,7 @@ public class CustomerDaoImpl implements ICustomerDao {
             try (var rs = pre.executeQuery()) {
                 if (rs.next()) {
                     int count = rs.getInt(1);
-                    return count > 0; // Nếu count > 0, email đã tồn tại
+                    return count > 0;
                 }
             }
         } catch (SQLException e) {

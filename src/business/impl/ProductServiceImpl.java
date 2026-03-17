@@ -16,30 +16,30 @@ public class ProductServiceImpl implements IProductService {
 
     // Hiển thị danh sách sản phẩm
     @Override
-    public List<Product> getAllProducts(){
+    public List<Product> getAllProducts() {
         return productDao.getAllProducts();
     }
 
 
     // Thêm sản phẩm mới
     @Override
-    public boolean addProduct(Product product){
-        if((product.getName() == null  || product.getName().trim().isEmpty())){
+    public boolean addProduct(Product product) {
+        if ((product.getName() == null || product.getName().trim().isEmpty())) {
             System.out.println(RED + "Lỗi: Tên sản phẩm không được để trống!" + RESET);
             return false;
         }
-        if((product.getBrand() == null || product.getBrand().trim().isEmpty())){
+        if ((product.getBrand() == null || product.getBrand().trim().isEmpty())) {
             System.out.println(RED + "Lỗi: Tên hãng không được để trống!" + RESET);
             return false;
         }
 
-        if((product.getPrice() < 0)){
-            System.out.println(RED + "Lỗi: Giá sản phẩm không được âm!" + RESET);
+        if ((product.getPrice() <= 0)) {
+            System.out.println(RED + "Lỗi: Giá sản phẩm phải lớn hơn 0!" + RESET);
             return false;
         }
 
-        if (product.getStock() < 0){
-            System.out.println(RED + "Lỗi: Số lượng tồn kho không được âm!" + RESET);
+        if (product.getStock() <= 0) {
+            System.out.println(RED + "Lỗi: Số lượng tồn kho phải lớn hơn 0!" + RESET);
             return false;
         }
 
@@ -48,19 +48,19 @@ public class ProductServiceImpl implements IProductService {
 
     // Lấy thông tin sản phẩm theo ID
     @Override
-    public Product getProductByid(int id){
+    public Product getProductByid(int id) {
         return productDao.getProductById(id);
     }
 
     // Cập nhật thông tin sản phẩm
     @Override
-    public boolean updateProduct(Product product){
-        if((product.getPrice() < 0)){
+    public boolean updateProduct(Product product) {
+        if ((product.getPrice() <= 0)) {
             System.out.println(RED + "Lỗi: Giá sản phẩm không được âm!" + RESET);
             return false;
         }
 
-        if (product.getStock() < 0){
+        if (product.getStock() <= 0) {
             System.out.println(RED + "Lỗi: Số lượng tồn kho không được âm!" + RESET);
             return false;
         }
@@ -69,7 +69,7 @@ public class ProductServiceImpl implements IProductService {
 
     // Xóa sản phẩm
     @Override
-    public boolean deleteProduct(int id){
+    public boolean deleteProduct(int id) {
         return productDao.deleteProduct(id);
     }
 
@@ -101,12 +101,12 @@ public class ProductServiceImpl implements IProductService {
 
     // Tìm kiếm sản phẩm  theo tên
     @Override
-    public List<Product> searchProductsByName(String keyword, int minStock){
+    public List<Product> searchProductsByName(String keyword, int minStock) {
         if (keyword == null || keyword.trim().isEmpty()) {
             System.out.println(RED + "Lỗi nhập liệu: Từ khóa tìm kiếm không được để trống!" + RESET);
             return new ArrayList<>();
         }
-        if (minStock < 0) {
+        if (minStock <0) {
             System.out.println(RED + "Lỗi nhập liệu: Số lượng tồn kho tối thiểu không được âm!" + RESET);
             return new ArrayList<>();
         }

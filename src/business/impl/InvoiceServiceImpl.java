@@ -31,7 +31,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
 
     //tim kiem hoa don theo ten khach hang
     @Override
-    public  List<Invoice> searchByCustomerName(String name) {
+    public List<Invoice> searchByCustomerName(String name) {
         if (name == null) name = "";
         return invoiceDao.searchByCustomerName(name.trim());
     }

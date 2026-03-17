@@ -13,7 +13,7 @@ public class CustomerView {
     public static final String GREEN = "\u001B[32m";
     public static final String RESET = "\u001B[0m";
 
-    public static void showMenuCustomer(Scanner sc){
+    public static void showMenuCustomer(Scanner sc) {
         int choice = 0;
         do {
             System.out.println("""
@@ -28,26 +28,26 @@ public class CustomerView {
             System.out.print("Nhập lựa chọn: ");
             try {
                 choice = Integer.parseInt(sc.nextLine());
-            }catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 System.out.println(RED + "Lỗi: Vui lòng nhập một số nguyên !" + RESET);
                 continue;
             }
 
-            switch (choice){
+            switch (choice) {
                 case 1:
-                    System.out.println("==================== DANH SÁCH KHÁCH HÀNG ====================");
+                    System.out.println("============================================= DANH SÁCH KHÁCH HÀNG ============================================");
                     getAllCustomersView();
                     break;
                 case 2:
-                    System.out.println("==================== THÊM KHÁCH HÀNG MỚI ====================");
+                    System.out.println("=========================== THÊM KHÁCH HÀNG MỚI ============================");
                     addCustomerView(sc);
                     break;
                 case 3:
-                    System.out.println("==================== CẬP NHẬT THÔNG TIN KHÁCH HÀNG ====================");
+                    System.out.println("====================== CẬP NHẬT THÔNG TIN KHÁCH HÀNG =======================");
                     updateCustomerView(sc);
                     break;
                 case 4:
-                    System.out.println("==================== XÓA KHÁCH HÀNG  ====================");
+                    System.out.println("============================== XÓA KHÁCH HÀNG ==============================");
                     deleteCustomerView(sc);
                     break;
                 case 5:
@@ -55,7 +55,7 @@ public class CustomerView {
                 default:
                     System.out.println(RED + "Lựa chọn không hợp lệ, vui lòng thử lại !" + RESET);
             }
-        }while(choice != 5);
+        } while (choice != 5);
     }
 
     // them khach hang moi
@@ -90,7 +90,7 @@ public class CustomerView {
         } catch (NumberFormatException e) {
             System.out.println(RED + "Lỗi nhập liệu: Họ tên khách hàng không được để trống! " + RESET);
         }
-     }
+    }
 
 
     // hien thi danh sach khach hang
@@ -102,27 +102,31 @@ public class CustomerView {
             return;
         }
 
-        System.out.println("===============================================================================================================");
-        System.out.printf("%-5s | %-25s | %-15s | %-30s | %-20s\n", "ID", "Tên khách hàng", "Số điện thoại", "Email", "Địa chỉ");
-        System.out.println("===============================================================================================================");
+        String separator = "+-------+---------------------------+-----------------+--------------------------------+----------------------+";
+
+        System.out.println(separator);
+
+        System.out.printf("| %-5s | %-25s | %-15s | %-30s | %-20s |\n", "ID", "Tên khách hàng", "Số điện thoại", "Email", "Địa chỉ");
+
+        System.out.println(separator);
 
         for (Customer c : list) {
             String displayPhone = (c.getPhone() != null && !c.getPhone().isEmpty()) ? c.getPhone() : "Trống";
             String displayEmail = (c.getEmail() != null && !c.getEmail().isEmpty()) ? c.getEmail() : "Trống";
             String displayAddress = (c.getAddress() != null && !c.getAddress().isEmpty()) ? c.getAddress() : "Trống";
 
-            System.out.printf("%-5d | %-25s | %-15s | %-30s | %-20s\n",
+            System.out.printf("| %-5d | %-25s | %-15s | %-30s | %-20s |\n",
                     c.getId(),
                     c.getName(),
                     displayPhone,
                     displayEmail,
                     displayAddress);
+            System.out.println(separator);
         }
-        System.out.println("===============================================================================================================");
     }
 
     // cap nhat thong tin khach hang
-    public static  void updateCustomerView(Scanner sc) {
+    public static void updateCustomerView(Scanner sc) {
         try {
             System.out.print("Nhập ID khách hàng cần cập nhật: ");
             int id = Integer.parseInt(sc.nextLine());
@@ -208,7 +212,7 @@ public class CustomerView {
                     System.out.println(RED + "Xóa thất bại. Có lỗi xảy ra ở hệ thống!" + RESET);
                 }
             } else {
-                System.out.println(GREEN + "Đã hủy thao tác xóa!" +RESET);
+                System.out.println(GREEN + "Đã hủy thao tác xóa!" + RESET);
             }
 
         } catch (NumberFormatException e) {

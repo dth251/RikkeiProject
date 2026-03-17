@@ -102,7 +102,7 @@ public class InvoiceDaoImpl implements IInvoiceDao {
         String sql = "SELECT i.id, i.customer_id, i.created_at, i.total_amount, c.name AS customer_name " +
                 "FROM invoice i " +
                 "JOIN customer c ON i.customer_id = c.id " +
-                "ORDER BY i.created_at DESC";
+                "ORDER BY i.id ASC";
 
         try (Connection conn = ConnectionDB.getConnection();
              PreparedStatement pre = conn.prepareStatement(sql);
@@ -139,7 +139,7 @@ public class InvoiceDaoImpl implements IInvoiceDao {
                 "FROM invoice i " +
                 "JOIN customer c ON i.customer_id = c.id " +
                 "WHERE c.name ILIKE ? " +
-                "ORDER BY i.created_at DESC";
+                "ORDER BY i.id ASC ";
 
         try (Connection conn = ConnectionDB.getConnection();
              PreparedStatement pre = conn.prepareStatement(sql)) {
@@ -178,7 +178,7 @@ public class InvoiceDaoImpl implements IInvoiceDao {
                 "FROM invoice i " +
                 "JOIN customer c ON i.customer_id = c.id " +
                 "WHERE CAST(i.created_at AS DATE) = ? " +
-                "ORDER BY i.created_at DESC";
+                "ORDER BY i.id ASC";
 
         try (Connection conn = ConnectionDB.getConnection();
              PreparedStatement pre = conn.prepareStatement(sql)) {

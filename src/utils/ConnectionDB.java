@@ -13,7 +13,7 @@ public class ConnectionDB {
 
     public static Connection getConnection() {
         // khai bao Driver
-        try{
+        try {
             Class.forName(DRIVER);
             return DriverManager.getConnection(URL, USERNAME, PASSWORD);
         } catch (SQLException | ClassNotFoundException e) {

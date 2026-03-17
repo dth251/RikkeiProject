@@ -1,8 +1,11 @@
 package presentation;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
+
 import business.ICustomerService;
 import business.IInvoiceService;
 import business.IProductService;
@@ -23,7 +26,6 @@ public class InvoiceView {
     private final IInvoiceService invoiceService = new InvoiceServiceImpl();
     private final ICustomerService customerService = new CustomerServiceImpl();
     private final IProductService productService = new ProductServiceImpl();
-
 
 
     public void showInvoiceMenu(Scanner sc) {
@@ -48,22 +50,22 @@ public class InvoiceView {
             }
 
             switch (choice) {
-                    case 1:
-                        System.out.println("==================== HIỂN THỊ DANH SÁCH HÓA ĐƠN ================");
-                        getAllInvoicesView();
-                        break;
-                    case 2:
-                        System.out.println("==================== THÊM HÓA ĐƠN ===================");
-                        addInvoiceView(sc);
-                        break;
-                    case 3:
-                        showSearchMenu(sc);
-                        break;
-                    case 4:
-                        return;
-                    default:
-                        System.out.println(RED + "Lựa chọn không hợp lệ. Vui lòng thử lại!" + RESET);
-                }
+                case 1:
+                    System.out.println("=========================== HIỂN THỊ DANH SÁCH HÓA ĐƠN ==========================");
+                    getAllInvoicesView();
+                    break;
+                case 2:
+                    System.out.println("=============================== THÊM HÓA ĐƠN ===============================");
+                    addInvoiceView(sc);
+                    break;
+                case 3:
+                    showSearchMenu(sc);
+                    break;
+                case 4:
+                    return;
+                default:
+                    System.out.println(RED + "Lựa chọn không hợp lệ. Vui lòng thử lại!" + RESET);
+            }
 
         } while (choice != 4);
     }
@@ -72,21 +74,25 @@ public class InvoiceView {
     private void showSearchMenu(Scanner sc) {
         int choice = 0;
         do {
-            System.out.println(" Menu tìm kiếm hóa đơn");
-            System.out.println("1. Tìm theo tên khách hàng");
-            System.out.println("2. Tìm theo ngày/tháng/năm");
-            System.out.println("3. Quay lại menu hóa đơn");
+            System.out.println("""
+                    ======================  TÌM KIẾM HÓA ĐƠN  =====================
+                    1. Tìm theo tên khách hàng
+                    2. Tìm theo ngày/tháng/năm
+                    3. Quay lại menu hóa đơn
+                    ===============================================================
+                    """);
+
             System.out.print("Nhập lựa chọn: ");
 
             try {
                 choice = Integer.parseInt(sc.nextLine());
                 switch (choice) {
                     case 1:
-                        System.out.println("=========== TÌM KIẾM HÓA ĐƠN THEO TÊN KHÁCH HÀNG ==============");
+                        System.out.println("====================== TÌM KIẾM HÓA ĐƠN THEO TÊN KHÁCH HÀNG =====================");
                         searchByCustomerNameView(sc);
                         break;
                     case 2:
-                        System.out.println("========== TÌM KIẾM HÓA ĐƠN THEO NGÀY/ THÁNG /NĂM ==============");
+                        System.out.println("====================== TÌM KIẾM HÓA ĐƠN THEO NGÀY/THÁNG/NĂM =====================");
                         searchByDateView(sc);
                         break;
                     case 3:
@@ -100,9 +106,6 @@ public class InvoiceView {
             }
         } while (choice != 3);
     }
-
-
-
 
 
     // them hoa don
@@ -125,7 +128,7 @@ public class InvoiceView {
 
             // vong lap de chon san pham
             while (true) {
-                System.out.println("\n--- Thêm sản phẩm vào giỏ ---");
+                System.out.println("===== Thêm sản phẩm vào giỏ =====");
                 System.out.print("Nhập ID điện thoại (Nhấn 0 để dừng chọn): ");
                 int productId = Integer.parseInt(sc.nextLine());
 
@@ -173,7 +176,7 @@ public class InvoiceView {
             }
 
             invoice.setTotalAmount(totalAmount);
-            System.out.println("===============================");
+            System.out.println("============================================================================");
             System.out.println("Tổng tiền thanh toán: " + totalAmount + " VND");
 
             boolean isSuccess = invoiceService.addInvoice(invoice);
@@ -191,58 +194,43 @@ public class InvoiceView {
         }
     }
 
-
-    //hien thi hoa don
-    private void getAllInvoicesView() {
-        List<Invoice> list = invoiceService.getAllInvoices();
-
-        if (list.isEmpty()) {
-            System.out.println(RED + "Hiện tại chưa có hóa đơn nào trong hệ thống!" + RESET);
-            return;
-        }
-
-        System.out.println("==========================================================================================");
-        System.out.printf("%-5s | %-25s | %-20s | %-15s\n", "ID", "Tên khách hàng", "Ngày tạo", "Tổng tiền");
-        System.out.println("==========================================================================================");
-
+    // ham dung chung cho in danh sach hoa don
+    private void printInvoiceTable(List<Invoice> list) {
+        String separator = "+-------+---------------------------+----------------------+--------------------+";
+        System.out.println(separator);
+        System.out.printf("| %-5s | %-25s | %-20s | %-18s |\n", "ID", "Tên khách hàng", "Ngày tạo", "Tổng tiền (VND)");
+        System.out.println(separator);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
         for (Invoice inv : list) {
             String dateStr = (inv.getCreatedAt() != null) ? inv.getCreatedAt().format(formatter) : "N/A";
-
-            System.out.printf("%-5d | %-25s | %-20s | %-15.2f\n",
-                    inv.getId(),
-                    inv.getCustomerName(),
-                    dateStr,
-                    inv.getTotalAmount());
+            System.out.printf("| %-5d | %-25s | %-20s | %,18.2f |\n",
+                    inv.getId(), inv.getCustomerName(), dateStr, inv.getTotalAmount());
+            System.out.println(separator);
         }
-        System.out.println("==========================================================================================");
     }
 
-    //hien thi tim kiem hoa don
+    // hien thi danh sach hoa don
+    private void getAllInvoicesView() {
+        List<Invoice> list = invoiceService.getAllInvoices();
+        if (list.isEmpty()) {
+            System.out.println(RED + "Hiện tại chưa có hóa đơn nào trong hệ thống!" + RESET);
+            return;
+        }
+        printInvoiceTable(list);
+    }
+
+    // Xử lý hiển thị cho các chức năng tìm kiếm
     private void printInvoiceList(List<Invoice> list) {
         if (list == null || list.isEmpty()) {
             System.out.println(RED + "Không tìm thấy hóa đơn nào phù hợp!" + RESET);
             return;
         }
-
-        System.out.println("==========================================================================================");
-        System.out.printf("%-5s | %-25s | %-20s | %-15s\n", "ID", "Tên khách hàng", "Ngày tạo", "Tổng tiền");
-        System.out.println("==========================================================================================");
-
-        java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-
-        for (Invoice inv : list) {
-            String dateStr = (inv.getCreatedAt() != null) ? inv.getCreatedAt().format(formatter) : "N/A";
-            System.out.printf("%-5d | %-25s | %-20s | %-15.2f\n",
-                    inv.getId(), inv.getCustomerName(), dateStr, inv.getTotalAmount());
-        }
-        System.out.println("==========================================================================================");
+        printInvoiceTable(list);
     }
 
-
-    // tim kiem theo ten khach hang
+    // Tìm kiếm theo tên khách hàng
     private void searchByCustomerNameView(Scanner sc) {
         System.out.print("Nhập tên khách hàng cần tìm: ");
         String name = sc.nextLine();
@@ -252,21 +240,20 @@ public class InvoiceView {
         printInvoiceList(list);
     }
 
-
-    // tim kiem theo ngay
+    //  Tìm kiếm theo ngày
     private void searchByDateView(Scanner sc) {
         System.out.print("Nhập ngày tạo hóa đơn (Định dạng: dd/MM/yyyy, ví dụ: 25/12/2025): ");
         String dateStr = sc.nextLine().trim();
 
         try {
-            java.time.format.DateTimeFormatter dateFormatter = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            java.time.LocalDate searchDate = java.time.LocalDate.parse(dateStr, dateFormatter);
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate searchDate = java.time.LocalDate.parse(dateStr, dateFormatter);
 
             System.out.println(GREEN + "Kết quả tìm kiếm hóa đơn trong ngày: " + dateStr + RESET);
             List<Invoice> list = invoiceService.searchByDate(searchDate);
             printInvoiceList(list);
 
-        } catch (java.time.format.DateTimeParseException e) {
+        } catch (DateTimeParseException e) {
             System.out.println(RED + "Lỗi nhập liệu: Định dạng ngày không hợp lệ. Vui lòng nhập đúng dd/MM/yyyy!" + RESET);
         }
     }
