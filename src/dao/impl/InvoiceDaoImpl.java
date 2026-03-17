@@ -6,6 +6,7 @@ import model.InvoiceDetail;
 import utils.ConnectionDB;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -144,7 +145,7 @@ public class InvoiceDaoImpl implements IInvoiceDao {
         try (Connection conn = ConnectionDB.getConnection();
              PreparedStatement pre = conn.prepareStatement(sql)) {
 
-            pre.setString(1, "%" + name + "%"); // Thêm % để tìm gần đúng
+            pre.setString(1, "%" + name + "%");
 
             try (ResultSet rs = pre.executeQuery()) {
                 while (rs.next()) {
@@ -171,7 +172,7 @@ public class InvoiceDaoImpl implements IInvoiceDao {
 
     // tim kiem khach hang theo ngay/thang/nam
     @Override
-    public List<Invoice> searchByDate(java.time.LocalDate date) {
+    public List<Invoice> searchByDate(LocalDate date) {
         List<Invoice> list = new ArrayList<>();
 
         String sql = "SELECT i.id, i.customer_id, i.created_at, i.total_amount, c.name AS customer_name " +
@@ -183,7 +184,7 @@ public class InvoiceDaoImpl implements IInvoiceDao {
         try (Connection conn = ConnectionDB.getConnection();
              PreparedStatement pre = conn.prepareStatement(sql)) {
 
-            pre.setDate(1, java.sql.Date.valueOf(date));
+            pre.setDate(1, Date.valueOf(date));
 
             try (ResultSet rs = pre.executeQuery()) {
                 while (rs.next()) {
@@ -216,7 +217,7 @@ public class InvoiceDaoImpl implements IInvoiceDao {
         try (Connection conn = ConnectionDB.getConnection();
              PreparedStatement pre = conn.prepareStatement(sql)) {
 
-            pre.setDate(1, java.sql.Date.valueOf(date));
+            pre.setDate(1, Date.valueOf(date));
             try (ResultSet rs = pre.executeQuery()) {
                 if (rs.next()) {
                     return rs.getDouble(1);
